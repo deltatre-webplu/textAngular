@@ -379,12 +379,19 @@ angular.module('textAngularSetup', [])
         aOnSelectAction: function(event, $element, editorScope){
             // setup the editor toolbar
             // Credit to the work at http://hackerwins.github.io/summernote/ for this editbar logic
+            var href = $element.attr('href');
+
+            if (href.startsWith('#')) {
+                window.location.href = href;
+                return;
+            }
+
             event.preventDefault();
             editorScope.displayElements.popover.css('width', '436px');
             var container = editorScope.displayElements.popoverContainer;
             container.empty();
             container.css('line-height', '28px');
-            var link = angular.element('<a href="' + $element.attr('href') + '" target="_blank">' + $element.attr('href') + '</a>');
+            var link = angular.element('<a href="' + href + '" target="_blank">' + href + '</a>');
             link.css({
                 'display': 'inline-block',
                 'max-width': '200px',
@@ -398,7 +405,7 @@ angular.module('textAngularSetup', [])
             var reLinkButton = angular.element('<button type="button" class="btn btn-default btn-sm btn-small" tabindex="-1" unselectable="on" title="' + taTranslations.editLink.reLinkButton.tooltip + '"><i class="fa fa-edit icon-edit"></i></button>');
             reLinkButton.on('click', function(event){
                 event.preventDefault();
-                var urlLink = $window.prompt(taTranslations.insertLink.dialogPrompt, $element.attr('href'));
+                var urlLink = $window.prompt(taTranslations.insertLink.dialogPrompt, href);
                 if(urlLink && urlLink !== '' && urlLink !== 'http://'){
                     $element.attr('href', urlLink);
                     editorScope.updateTaBindtaTextElement();
